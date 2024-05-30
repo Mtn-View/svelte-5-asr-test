@@ -1,5 +1,5 @@
 import merge from 'deepmerge'
-import {mount, unmount} from 'svelte'
+import { mount, unmount } from 'svelte'
 
 export default function SvelteStateRendererFactory(defaultOptions = {}) {
 	return function makeRenderer(stateRouter) {
@@ -10,9 +10,10 @@ export default function SvelteStateRendererFactory(defaultOptions = {}) {
 			getActiveState: stateRouter.getActiveState,
 		}
 
-		async function render(context) {
+		function render(context) {
 			const { element: target, template, content } = context
 
+			// eslint-disable-next-line no-undef
 			const mergedProps = $state(Object.assign(content, defaultOptions.props, { asr }))
 
 			const rendererSuppliedOptions = merge(defaultOptions, {
@@ -39,32 +40,31 @@ export default function SvelteStateRendererFactory(defaultOptions = {}) {
 			svelte.asrOnDestroy = () => stateRouter.removeListener(`stateChangeEnd`, onRouteChange)
 			svelte.mountedToTarget = target
 
-			return svelte
+			return Promise.resolve(svelte)
 		}
 
 		return {
 			render,
-			reset: async function reset(context) {
+			reset: function reset(context) {
 				const svelte = context.domApi
 				const element = svelte.mountedToTarget
 
 				svelte.asrOnDestroy()
-				// svelte.$destroy()
 				unmount(svelte)
 
-				const renderContext = Object.assign({ element }, context)
+				const renderContext = { element, ...context }
 
 				return render(renderContext)
 			},
-			destroy: async function destroy(svelte) {
+			destroy: function destroy(svelte) {
 				svelte.asrOnDestroy()
-				// svelte.$destroy()
 				unmount(svelte)
+				return Promise.resolve()
 			},
-			getChildElement: async function getChildElement(svelte) {
+			getChildElement: function getChildElement(svelte) {
 				const element = svelte.mountedToTarget
 				const child = element.querySelector(`uiView`)
-				return child
+				return Promise.resolve(child)
 			},
 		}
 	}

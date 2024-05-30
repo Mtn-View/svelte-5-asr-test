@@ -1,18 +1,15 @@
 <script>
-	export let stateParameter
-	export let asr
+	let { asr, stateParameter } = $props()
 </script>
 
-Hello from a child state
+<h2>Runes State</h2>
 <br />
 Edit value to change state parameter
 <br />
 <input
 	type="text"
 	value={stateParameter}
-	on:change={(e) => {
-		asr.go(null, { stateParameter: e.target.value })
-	}}
+	onchange={(e) => asr.go(null, { stateParameter: e.target.value })}
 />
 
 <hr />

@@ -1,11 +1,12 @@
 import createStateRouter from 'abstract-state-router'
-import createSvelteRenderer from '$lib/render.svelte'
+import createSvelte5Renderer from '$lib/render.svelte'
 import Runes from './states/Runes.svelte'
 import Root from './states/Root.svelte'
+import NoRunes from './states/NoRunes.svelte'
 
 let asr
 
-asr = createStateRouter(createSvelteRenderer(), document.querySelector('body'))
+asr = createStateRouter(createSvelte5Renderer(), document.querySelector('body'))
 
 asr.addState({
 	name: 'root',
@@ -30,6 +31,7 @@ asr.addState({
 		})
 	}
 })
+
 asr.addState({
 	name: 'root.runes.child',
 	route: '/child',
@@ -42,4 +44,14 @@ asr.addState({
 		})
 	}
 })
+
+asr.addState({
+	name: 'root.no-runes',
+	route: '/no-runes',
+	template: NoRunes,
+	resolve(data, parameters) {
+		return Promise.resolve()
+	}
+})
+
 asr.evaluateCurrentRoute('root')
