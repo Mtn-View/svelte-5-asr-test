@@ -49,8 +49,12 @@ asr.addState({
 	name: 'root.no-runes',
 	route: '/no-runes',
 	template: NoRunes,
+	querystringParameters: ['stateParameter'],
 	resolve(data, parameters) {
-		return Promise.resolve()
+		return Promise.resolve({
+			count: 0,
+			stateParameter: parameters?.stateParameter ?? 'baz'
+		})
 	}
 })
 

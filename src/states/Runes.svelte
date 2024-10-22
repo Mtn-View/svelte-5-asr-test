@@ -8,8 +8,8 @@ Edit value to change state parameter
 <br />
 <input
 	type="text"
-	value={stateParameter}
-	onchange={(e) => asr.go(null, { stateParameter: e.target.value })}
+	bind:value={stateParameter}
+	onchange={() => asr.go(null, { stateParameter })}
 />
 
 <hr />
