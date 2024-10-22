@@ -13,7 +13,6 @@ export default function SvelteStateRendererFactory(defaultOptions = {}) {
 		function render(context) {
 			const { element: target, template, content } = context
 
-			// eslint-disable-next-line no-undef
 			const mergedProps = $state(Object.assign(content, defaultOptions.props, { asr }))
 
 			const rendererSuppliedOptions = merge(defaultOptions, {
@@ -32,7 +31,7 @@ export default function SvelteStateRendererFactory(defaultOptions = {}) {
 			}
 
 			function onRouteChange() {
-				svelte.asr = asr
+				mergedProps.asr = asr
 			}
 
 			stateRouter.on(`stateChangeEnd`, onRouteChange)
